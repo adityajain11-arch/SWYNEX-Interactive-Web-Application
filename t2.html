@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskflow Pro '95 - Task & Project Manager</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        winTeal: '#008080',
+                        winGray: '#c0c0c0',
+                        winDarkGray: '#808080',
+                        winLightGray: '#dfdfdf',
+                        winBlue: '#000080',
+                        winBlueLight: '#1084d0',
+                        winActiveTab: '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom Windows 95 Style CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+        
+        * {
+            font-family: "Tahoma", "MS Sans Serif", "Geneva", "Courier New", monospace;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: #008080; /* Windows 95 Classic Teal Wallpaper */
+            image-rendering: pixelated;
+        }
+
+        /* CLASSIC RETRO 3D BEVEL BORDERS */
+        .win-outset {
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080;
+            background-color: #c0c0c0;
+        }
+
+        .win-inset {
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            box-shadow: inset 1px 1px 0px #000000, inset -1px -1px 0px #dfdfdf;
+            background-color: #ffffff;
+        }
+
+        .win-inset-gray {
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            background-color: #c0c0c0;
+        }
+
+        /* RETRO PUSH BUTTONS */
+        .win-btn {
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+            box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080;
+            background-color: #c0c0c0;
+            color: #000000;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 3px 8px;
+            cursor: pointer;
+            display: inline-flex;
+            items-center: center;
+            justify-content: center;
+        }
+
+        .win-btn:active, .win-btn-pressed {
+            border-top: 2px solid #000000;
+            border-left: 2px solid #000000;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #dfdfdf;
+            padding: 4px 7px 2px 9px;
+        }
+
+        /* WINDOW TITLE BAR */
+        .win-titlebar {
+            background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 3px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            letter-spacing: 0.5px;
+        }
+
+        .win-titlebar-btn {
+            width: 16px;
+            height: 14px;
+            background-color: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            color: #000000;
+            font-size: 9px;
+            font-weight: bold;
+            line-height: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .win-titlebar-btn:active {
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+        }
+
+        /* RETRO TAB BUTTONS */
+        .win-tab {
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #000000;
+            background-color: #c0c0c0;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 2px;
+            cursor: pointer;
+            position: relative;
+            top: 2px;
+        }
+
+        .win-tab-active {
+            background-color: #c0c0c0;
+            border-bottom: none;
+            z-index: 10;
+            top: 0px;
+            padding-bottom: 5px;
+        }
+
+        /* CUSTOM SCROLLBARS FOR 90s OS */
+        ::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+            background-color: #dfdfdf;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+            box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080;
+        }
+        ::-webkit-scrollbar-button {
+            background-color: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* DRAG AND DROP VISUALS */
+        .dragging {
+            opacity: 0.6;
+            outline: 1px dashed #000080;
+        }
+        .drag-over {
+            background-color: #000080 !important;
+            color: #ffffff !important;
+        }
+
+        /* FORM FIELD RETRO STYLING */
+        input[type="text"], input[type="url"], input[type="date"], textarea, select {
+            border-top: 2px solid #808080 !important;
+            border-left: 2px solid #808080 !important;
+            border-right: 2px solid #ffffff !important;
+            border-bottom: 2px solid #ffffff !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            font-size: 12px !important;
+            padding: 3px 5px !important;
+            outline: none !important;
+            border-radius: 0px !important;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            background-color: #ffffcc !important; /* Retro highlight tint */
+        }
+    </style>
+</head>
+<body class="min-h-screen p-2 sm:p-4 flex flex-col justify-between space-y-4">
+
+    <!-- TOP SECTION: APP CONTAINER -->
+    <div class="max-w-7xl w-full mx-auto space-y-3">
+
+        <!-- HEADER BANNER: GITHUB REPO SUBMISSION DIALOG -->
+        <header class="win-outset p-1">
+            <div class="win-titlebar mb-1">
+                <div class="flex items-center space-x-1.5">
+                    <i data-lucide="folder-git-2" class="w-3.5 h-3.5 text-white"></i>
+                    <span>System Repository Submission Portal v1.0</span>
+                </div>
+                <div class="flex space-x-0.5">
+                    <button class="win-titlebar-btn" title="Minimize">_</button>
+                    <button class="win-titlebar-btn" title="Maximize">□</button>
+                    <button class="win-titlebar-btn" title="Close">✕</button>
+                </div>
+            </div>
+
+            <div class="p-2 bg-[#c0c0c0] flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 win-outset flex items-center justify-center bg-gray-200 shrink-0">
+                        <i data-lucide="github" class="w-5 h-5 text-black"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-black">Submit Remote Repository</div>
+                        <div class="text-[11px] text-gray-700">Enter your project GitHub URL to run Automated Verification test suites.</div>
+                    </div>
+                </div>
+
+                <form id="repoSubmissionForm" onsubmit="handleRepoSubmit(event)" class="w-full md:w-auto flex flex-col sm:flex-row items-center gap-1.5">
+                    <div class="w-full sm:w-80">
+                        <input type="url" id="repoUrlInput" placeholder="https://github.com/username/repository" required
+                            class="w-full" />
+                    </div>
+                    <button type="submit" class="win-btn w-full sm:w-auto flex items-center justify-center gap-1">
+                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                        <span>[ Execute Submit ]</span>
+                    </button>
+                </form>
+            </div>
+        </header>
+
+        <!-- MAIN APPLICATION WINDOW -->
+        <main class="win-outset p-1">
+            
+            <!-- APPLICATION TITLEBAR -->
+            <div class="win-titlebar">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="layout" class="w-4 h-4"></i>
+                    <span class="font-bold">C:\TASKFLOW\PRO95.EXE - [Project Workstation]</span>
+                </div>
+                <div class="flex space-x-0.5">
+                    <button class="win-titlebar-btn" onclick="toggleSound()" title="Sound FX">🔊</button>
+                    <button class="win-titlebar-btn" title="Minimize">_</button>
+                    <button class="win-titlebar-btn" title="Maximize">□</button>
+                    <button class="win-titlebar-btn" title="Close">✕</button>
+                </div>
+            </div>
+
+            <!-- WINDOW MENUBAR -->
+            <div class="flex items-center space-x-3 text-xs py-1 px-2 bg-[#c0c0c0] border-b border-[#808080] text-black">
+                <span class="hover:bg-blue-900 hover:text-white px-1 cursor-pointer"><u>F</u>ile</span>
+                <span class="hover:bg-blue-900 hover:text-white px-1 cursor-pointer" onclick="openModal()"><u>E</u>dit</span>
+                <span class="hover:bg-blue-900 hover:text-white px-1 cursor-pointer" onclick="resetFilters()"><u>V</u>iew</span>
+                <span class="hover:bg-blue-900 hover:text-white px-1 cursor-pointer" onclick="togglePalette()"><u>O</u>ptions</span>
+                <span class="hover:bg-blue-900 hover:text-white px-1 cursor-pointer" onclick="showAboutDialog()"><u>H</u>elp</span>
+            </div>
+
+            <div class="p-2 space-y-3">
+                
+                <!-- ANALYTICS DASHBOARD: SYSTEM MONITORS -->
+                <section class="win-inset-gray p-2">
+                    <div class="text-[11px] font-bold text-gray-800 mb-1 flex items-center justify-between">
+                        <span>📊 Performance Diagnostics Monitor</span>
+                        <span id="sysClock" class="font-mono text-blue-900">12:00:00 PM</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                        <!-- Stat Item -->
+                        <div class="win-inset p-1.5 text-center">
+                            <div class="text-[10px] uppercase font-bold text-gray-600">Total Allocated</div>
+                            <div class="text-xl font-mono font-bold text-black" id="statTotal">0</div>
+                        </div>
+
+                        <!-- Stat Item -->
+                        <div class="win-inset p-1.5 text-center">
+                            <div class="text-[10px] uppercase font-bold text-amber-800">Processing</div>
+                            <div class="text-xl font-mono font-bold text-amber-700" id="statInProgress">0</div>
+                        </div>
+
+                        <!-- Stat Item -->
+                        <div class="win-inset p-1.5 text-center">
+                            <div class="text-[10px] uppercase font-bold text-emerald-800">Terminated (OK)</div>
+                            <div class="text-xl font-mono font-bold text-emerald-700" id="statCompleted">0</div>
+                        </div>
+
+                        <!-- Stat Item -->
+                        <div class="win-inset p-1.5 text-center">
+                            <div class="text-[10px] uppercase font-bold text-red-800">Critical Overdue</div>
+                            <div class="text-xl font-mono font-bold text-red-600" id="statOverdue">0</div>
+                        </div>
+
+                        <!-- Stat Bar Item -->
+                        <div class="col-span-2 md:col-span-1 win-inset p-1.5 flex flex-col justify-between">
+                            <div class="flex justify-between text-[10px] font-bold">
+                                <span>Memory Ratio</span>
+                                <span id="statPercentage" class="font-mono text-blue-900">0%</span>
+                            </div>
+                            <div class="win-inset bg-gray-200 h-3.5 relative overflow-hidden p-0.5">
+                                <div id="statProgressBar" class="h-full bg-blue-900 transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TOOLBAR & FILTERS SHEET -->
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 win-outset p-1.5">
+                    
+                    <!-- Search & Filters -->
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <!-- Search Box -->
+                        <div class="flex items-center space-x-1">
+                            <label class="font-bold text-black">Query:</label>
+                            <input type="text" id="searchInput" oninput="handleSearchDebounced(event)" placeholder="Search buffer..." class="w-32 sm:w-44" />
+                        </div>
+
+                        <!-- Project Category Filter -->
+                        <div class="flex items-center space-x-1">
+                            <label class="font-bold text-black">Group:</label>
+                            <select id="filterProject" onchange="applyFilters()">
+                                <option value="ALL">ALL GROUPS</option>
+                                <option value="Frontend">Frontend</option>
+                                <option value="Backend">Backend</option>
+                                <option value="Design">Design</option>
+                                <option value="Marketing">Marketing</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority Filter -->
+                        <div class="flex items-center space-x-1">
+                            <label class="font-bold text-black">Priority:</label>
+                            <select id="filterPriority" onchange="applyFilters()">
+                                <option value="ALL">ALL LEVELS</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+
+                        <button onclick="resetFilters()" class="win-btn">Reset</button>
+                    </div>
+
+                    <!-- Right Controls & View Selector -->
+                    <div class="flex items-center justify-between md:justify-end gap-2">
+                        <!-- Create New Task Button -->
+                        <button onclick="openModal()" class="win-btn bg-yellow-200 hover:bg-yellow-100 flex items-center space-x-1">
+                            <i data-lucide="plus-square" class="w-4 h-4 text-blue-900"></i>
+                            <span>New Task...</span>
+                        </button>
+
+                        <!-- View Toggle Sheet Tabs -->
+                        <div class="flex items-end pt-1">
+                            <button id="viewBtnKanban" onclick="switchView('kanban')" class="win-tab win-tab-active">
+                                Kanban.msc
+                            </button>
+                            <button id="viewBtnList" onclick="switchView('list')" class="win-tab">
+                                Details.log
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAIN WORK AREA: KANBAN BOARD VIEW -->
+                <div id="kanbanView" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                    
+                    <!-- COLUMN: TO DO -->
+                    <div class="win-inset-gray p-1.5 flex flex-col min-h-[380px]">
+                        <div class="win-titlebar bg-gray-700 mb-1">
+                            <div class="flex items-center space-x-1">
+                                <span>📁 TO DO</span>
+                            </div>
+                            <span id="count-todo" class="px-1 text-xs font-mono bg-black text-yellow-300 border border-white">0</span>
+                        </div>
+                        <div id="col-todo" data-status="To Do" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
+                            class="kanban-dropzone flex-1 overflow-y-auto space-y-2 p-1 win-inset bg-[#e0e0e0]">
+                        </div>
+                    </div>
+
+                    <!-- COLUMN: IN PROGRESS -->
+                    <div class="win-inset-gray p-1.5 flex flex-col min-h-[380px]">
+                        <div class="win-titlebar bg-amber-800 mb-1">
+                            <div class="flex items-center space-x-1">
+                                <span>⚙️ IN PROGRESS</span>
+                            </div>
+                            <span id="count-in-progress" class="px-1 text-xs font-mono bg-black text-yellow-300 border border-white">0</span>
+                        </div>
+                        <div id="col-in-progress" data-status="In Progress" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
+                            class="kanban-dropzone flex-1 overflow-y-auto space-y-2 p-1 win-inset bg-[#e0e0e0]">
+                        </div>
+                    </div>
+
+                    <!-- COLUMN: REVIEW -->
+                    <div class="win-inset-gray p-1.5 flex flex-col min-h-[380px]">
+                        <div class="win-titlebar bg-purple-900 mb-1">
+                            <div class="flex items-center space-x-1">
+                                <span>🔍 IN REVIEW</span>
+                            </div>
+                            <span id="count-review" class="px-1 text-xs font-mono bg-black text-yellow-300 border border-white">0</span>
+                        </div>
+                        <div id="col-review" data-status="Review" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
+                            class="kanban-dropzone flex-1 overflow-y-auto space-y-2 p-1 win-inset bg-[#e0e0e0]">
+                        </div>
+                    </div>
+
+                    <!-- COLUMN: COMPLETED -->
+                    <div class="win-inset-gray p-1.5 flex flex-col min-h-[380px]">
+                        <div class="win-titlebar bg-emerald-900 mb-1">
+                            <div class="flex items-center space-x-1">
+                                <span>💾 COMPLETED</span>
+                            </div>
+                            <span id="count-completed" class="px-1 text-xs font-mono bg-black text-yellow-300 border border-white">0</span>
+                        </div>
+                        <div id="col-completed" data-status="Completed" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
+                            class="kanban-dropzone flex-1 overflow-y-auto space-y-2 p-1 win-inset bg-[#e0e0e0]">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MAIN WORK AREA: LIST VIEW TABLE (Hidden by default) -->
+                <div id="listView" class="hidden win-inset p-1 overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-[#c0c0c0] text-black font-bold border-b-2 border-black">
+                            <tr>
+                                <th class="p-1.5 border-r border-[#808080]">Task Description</th>
+                                <th class="p-1.5 border-r border-[#808080]">Project</th>
+                                <th class="p-1.5 border-r border-[#808080]">Priority</th>
+                                <th class="p-1.5 border-r border-[#808080]">Status</th>
+                                <th class="p-1.5 border-r border-[#808080]">Target Date</th>
+                                <th class="p-1.5 text-right">Commands</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listTableBody" class="divide-y divide-gray-300 font-mono">
+                            <!-- Injected Dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- WINDOW STATUS BAR -->
+            <div class="win-inset-gray p-1 mt-2 text-[11px] flex items-center justify-between text-gray-700 font-mono">
+                <div class="flex items-center space-x-2">
+                    <span id="statusIndicator">Ready.</span>
+                </div>
+                <div>System Mode: WIN32_95</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- RETRO BOTTOM TASKBAR -->
+    <footer class="w-full max-w-7xl mx-auto win-outset p-1 flex items-center justify-between text-xs z-30">
+        <div class="flex items-center space-x-2">
+            <button onclick="openModal()" class="win-btn flex items-center space-x-1 font-bold">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-black"></i>
+                <span>Start</span>
+            </button>
+            <div class="h-5 w-0.5 bg-gray-500 border-r border-white"></div>
+            <div class="win-inset px-2 py-0.5 font-bold text-gray-800 bg-gray-200 flex items-center space-x-1">
+                <i data-lucide="check-square" class="w-3.5 h-3.5 text-blue-800"></i>
+                <span>Taskflow Workstation</span>
+            </div>
+        </div>
+
+        <div class="win-inset px-2 py-0.5 font-mono text-[11px] bg-gray-200 flex items-center space-x-1">
+            <i data-lucide="volume-2" class="w-3 h-3 text-gray-700"></i>
+            <span id="taskbarClock">00:00 AM</span>
+        </div>
+    </footer>
+
+    <!-- MODAL DIALOG: TASK PROPERIES (CREATE / EDIT) -->
+    <div id="taskModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-[1px] flex items-center justify-center hidden p-3">
+        <div class="win-outset max-w-md w-full p-1 shadow-2xl">
+            <!-- Dialog Titlebar -->
+            <div class="win-titlebar">
+                <span id="modalTitle">Task Properties</span>
+                <button onclick="closeModal()" class="win-titlebar-btn">✕</button>
+            </div>
+
+            <!-- Dialog Body -->
+            <form id="taskForm" onsubmit="handleTaskSubmit(event)" class="p-3 bg-[#c0c0c0] space-y-3 text-xs" novalidate>
+                <input type="hidden" id="taskId">
+
+                <!-- Title Input -->
+                <div class="space-y-1">
+                    <label class="font-bold text-black block">Task Name / Identifier:</label>
+                    <input type="text" id="taskTitle" maxlength="80" oninput="validateTitleInput()" required class="w-full" />
+                    <div class="flex justify-between text-[10px]">
+                        <span id="titleError" class="text-red-700 font-bold hidden">! Field mandatory (min 3 chars).</span>
+                        <span id="titleCounter" class="text-gray-600 ml-auto font-mono">0/80</span>
+                    </div>
+                </div>
+
+                <!-- Description Input -->
+                <div class="space-y-1">
+                    <label class="font-bold text-black block">System Notes & Description:</label>
+                    <textarea id="taskDescription" rows="3" class="w-full"></textarea>
+                </div>
+
+                <!-- Grid: Category & Priority -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="font-bold text-black block mb-1">Group Domain:</label>
+                        <select id="taskProject" class="w-full">
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Design">Design</option>
+                            <option value="Marketing">Marketing</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="font-bold text-black block mb-1">Priority Level:</label>
+                        <select id="taskPriority" class="w-full">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Urgent">Urgent</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid: Status & Due Date -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="font-bold text-black block mb-1">Execution Status:</label>
+                        <select id="taskStatus" class="w-full">
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Review">In Review</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="font-bold text-black block mb-1">Target Date:</label>
+                        <input type="date" id="taskDueDate" required onchange="validateDueDateInput()" class="w-full" />
+                        <span id="dueDateError" class="text-[10px] text-red-700 font-bold hidden block">! Select valid date.</span>
+                    </div>
+                </div>
+
+                <!-- Dialog Action Buttons -->
+                <div class="flex justify-end space-x-2 pt-2 border-t border-gray-400">
+                    <button type="submit" class="win-btn w-20">OK</button>
+                    <button type="button" onclick="closeModal()" class="win-btn w-20">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SYSTEM RETRO ALERT DIALOG -->
+    <div id="retroAlert" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center hidden p-3">
+        <div class="win-outset max-w-sm w-full p-1 shadow-2xl">
+            <div class="win-titlebar bg-red-900">
+                <span id="retroAlertTitle">System Alert</span>
+                <button onclick="closeRetroAlert()" class="win-titlebar-btn">✕</button>
+            </div>
+            <div class="p-4 bg-[#c0c0c0] space-y-4 text-xs">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 win-outset bg-yellow-300 flex items-center justify-center font-bold text-lg text-black shrink-0">!</div>
+                    <div id="retroAlertMessage" class="text-black font-semibold">Alert Message Text</div>
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="closeRetroAlert()" class="win-btn w-20">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RETRO SOUND AUDIO SYNTHESIZER (Tone.js inspired web audio API) -->
+    <script>
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function playBeep(freq = 440, type = 'sine', duration = 0.08) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            showRetroAlert("Sound Effects", `Audio clicks ${soundEnabled ? 'ENABLED' : 'DISABLED'}`);
+        }
+    </script>
+
+    <!-- MAIN APPLICATION SCRIPT -->
+    <script>
+        // INITIAL DEMO DATA
+        const sampleTasks = [
+            {
+                id: 'task-1',
+                title: 'Design UI Wireframes for Mobile Dashboard',
+                description: 'Create high-fidelity Figma components for the task manager dashboard and list views.',
+                project: 'Design',
+                priority: 'High',
+                status: 'In Progress',
+                dueDate: getRelativeDate(1)
+            },
+            {
+                id: 'task-2',
+                title: 'Implement REST API Authentication Endpoint',
+                description: 'Set up JWT token creation, refresh tokens, and rate limiting middleware.',
+                project: 'Backend',
+                priority: 'Urgent',
+                status: 'To Do',
+                dueDate: getRelativeDate(2)
+            },
+            {
+                id: 'task-3',
+                title: 'Optimize Tailwind CSS Bundle & Assets',
+                description: 'Configure PurgeCSS to prune unused styles and optimize bundle build times.',
+                project: 'Frontend',
+                priority: 'Medium',
+                status: 'Review',
+                dueDate: getRelativeDate(-1)
+            },
+            {
+                id: 'task-4',
+                title: 'Setup GitHub Actions CI/CD Pipeline',
+                description: 'Automate unit tests execution and deployment to staging server on main pull requests.',
+                project: 'Backend',
+                priority: 'Low',
+                status: 'Completed',
+                dueDate: getRelativeDate(-3)
+            }
+        ];
+
+        // GLOBAL STATE
+        let tasks = [];
+        let currentView = 'kanban';
+        let searchQuery = '';
+        let searchTimeout = null;
+        let draggedTaskId = null;
+
+        function getRelativeDate(daysOffset) {
+            const d = new Date();
+            d.setDate(d.getDate() + daysOffset);
+            return d.toISOString().split('T')[0];
+        }
+
+        // INITIALIZATION
+        window.onload = function() {
+            loadState();
+            render();
+            startSystemClock();
+            lucide.createIcons();
+        };
+
+        function startSystemClock() {
+            const update = () => {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString();
+                document.getElementById('sysClock').innerText = timeStr;
+                document.getElementById('taskbarClock').innerText = timeStr;
+            };
+            update();
+            setInterval(update, 1000);
+        }
+
+        // STATE PERSISTENCE
+        function loadState() {
+            const stored = localStorage.getItem('taskflow_retro_tasks');
+            if (stored) {
+                try { tasks = JSON.parse(stored); } catch(e) { tasks = [...sampleTasks]; }
+            } else {
+                tasks = [...sampleTasks];
+                saveState();
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('taskflow_retro_tasks', JSON.stringify(tasks));
+        }
+
+        // SEARCH DEBOUNCER
+        function handleSearchDebounced(e) {
+            clearTimeout(searchTimeout);
+            const val = e.target.value;
+            searchTimeout = setTimeout(() => {
+                searchQuery = val.trim().toLowerCase();
+                render();
+            }, 200);
+        }
+
+        function applyFilters() {
+            playBeep(600, 'square');
+            render();
+        }
+
+        function resetFilters() {
+            playBeep(300, 'square');
+            document.getElementById('filterProject').value = 'ALL';
+            document.getElementById('filterPriority').value = 'ALL';
+            document.getElementById('searchInput').value = '';
+            searchQuery = '';
+            render();
+            updateStatus('Filters reset to default.');
+        }
+
+        // VIEW TOGGLING
+        function switchView(view) {
+            playBeep(800, 'square');
+            currentView = view;
+            const kanbanView = document.getElementById('kanbanView');
+            const listView = document.getElementById('listView');
+            const btnKanban = document.getElementById('viewBtnKanban');
+            const btnList = document.getElementById('viewBtnList');
+
+            if (view === 'kanban') {
+                kanbanView.classList.remove('hidden');
+                listView.classList.add('hidden');
+                btnKanban.classList.add('win-tab-active');
+                btnList.classList.remove('win-tab-active');
+            } else {
+                kanbanView.classList.add('hidden');
+                listView.classList.remove('hidden');
+                btnList.classList.add('win-tab-active');
+                btnKanban.classList.remove('win-tab-active');
+            }
+            render();
+        }
+
+        function getFilteredTasks() {
+            const projectFilter = document.getElementById('filterProject').value;
+            const priorityFilter = document.getElementById('filterPriority').value;
+
+            return tasks.filter(task => {
+                const matchesProject = projectFilter === 'ALL' || task.project === projectFilter;
+                const matchesPriority = priorityFilter === 'ALL' || task.priority === priorityFilter;
+                const matchesSearch = !searchQuery || 
+                    task.title.toLowerCase().includes(searchQuery) || 
+                    (task.description && task.description.toLowerCase().includes(searchQuery));
+
+                return matchesProject && matchesPriority && matchesSearch;
+            });
+        }
+
+        // MAIN RENDER
+        function render() {
+            const filtered = getFilteredTasks();
+            updateMetrics();
+
+            if (currentView === 'kanban') {
+                renderKanban(filtered);
+            } else {
+                renderList(filtered);
+            }
+            lucide.createIcons();
+        }
+
+        function updateMetrics() {
+            const total = tasks.length;
+            const inProgress = tasks.filter(t => t.status === 'In Progress').length;
+            const completed = tasks.filter(t => t.status === 'Completed').length;
+            const today = new Date().toISOString().split('T')[0];
+            const overdue = tasks.filter(t => t.status !== 'Completed' && t.dueDate < today).length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statInProgress').innerText = inProgress;
+            document.getElementById('statCompleted').innerText = completed;
+            document.getElementById('statOverdue').innerText = overdue;
+            document.getElementById('statPercentage').innerText = `${percentage}%`;
+            document.getElementById('statProgressBar').style.width = `${percentage}%`;
+        }
+
+        // KANBAN RENDER
+        function renderKanban(filtered) {
+            const columns = {
+                'To Do': document.getElementById('col-todo'),
+                'In Progress': document.getElementById('col-in-progress'),
+                'Review': document.getElementById('col-review'),
+                'Completed': document.getElementById('col-completed')
+            };
+
+            const counts = {
+                'To Do': document.getElementById('count-todo'),
+                'In Progress': document.getElementById('count-in-progress'),
+                'Review': document.getElementById('count-review'),
+                'Completed': document.getElementById('count-completed')
+            };
+
+            Object.values(columns).forEach(col => col.innerHTML = '');
+            const tally = { 'To Do': 0, 'In Progress': 0, 'Review': 0, 'Completed': 0 };
+
+            filtered.forEach(task => {
+                if (columns[task.status]) {
+                    tally[task.status]++;
+                    columns[task.status].appendChild(createKanbanCard(task));
+                }
+            });
+
+            Object.keys(counts).forEach(k => counts[k].innerText = tally[k]);
+        }
+
+        function createKanbanCard(task) {
+            const card = document.createElement('div');
+            card.className = 'win-outset p-2 cursor-grab active:cursor-grabbing hover:bg-gray-100 transition text-xs space-y-1 bg-[#c0c0c0]';
+            card.draggable = true;
+            card.id = `card-${task.id}`;
+
+            card.ondragstart = (e) => handleDragStart(e, task.id);
+            card.ondragend = (e) => handleDragEnd(e);
+
+            const isOverdue = task.status !== 'Completed' && task.dueDate < new Date().toISOString().split('T')[0];
+
+            card.innerHTML = `
+                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
+                    <span class="font-bold text-[10px] bg-black text-white px-1 font-mono">${escapeHtml(task.project)}</span>
+                    <span class="font-bold text-[10px] ${getPriorityStyle(task.priority)}">[${task.priority}]</span>
+                </div>
+                <div class="font-bold text-black leading-tight pt-0.5">${escapeHtml(task.title)}</div>
+                ${task.description ? `<div class="text-[11px] text-gray-700 line-clamp-2">${escapeHtml(task.description)}</div>` : ''}
+                <div class="flex items-center justify-between pt-1 border-t border-white text-[10px] font-mono">
+                    <span class="${isOverdue ? 'text-red-700 font-bold' : 'text-gray-700'}">📅 ${task.dueDate}</span>
+                    <div class="space-x-1">
+                        <button onclick="openModal('${task.id}')" class="win-btn text-[9px] px-1 py-0">Edit</button>
+                        <button onclick="deleteTask('${task.id}')" class="win-btn text-[9px] px-1 py-0">Del</button>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // LIST VIEW RENDER
+        function renderList(filtered) {
+            const tbody = document.getElementById('listTableBody');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="6" class="text-center p-4 text-gray-600 font-mono">No matching records found in buffer.</td></tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(task => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-yellow-100 bg-white';
+                const isOverdue = task.status !== 'Completed' && task.dueDate < new Date().toISOString().split('T')[0];
+
+                tr.innerHTML = `
+                    <td class="p-1.5 font-bold text-black border-r border-gray-300">${escapeHtml(task.title)}</td>
+                    <td class="p-1.5 border-r border-gray-300 font-mono">${escapeHtml(task.project)}</td>
+                    <td class="p-1.5 border-r border-gray-300 font-bold ${getPriorityStyle(task.priority)}">${task.priority}</td>
+                    <td class="p-1.5 border-r border-gray-300 font-mono">${task.status}</td>
+                    <td class="p-1.5 border-r border-gray-300 ${isOverdue ? 'text-red-700 font-bold' : ''}">${task.dueDate}</td>
+                    <td class="p-1.5 text-right space-x-1">
+                        <button onclick="openModal('${task.id}')" class="win-btn text-[9px] px-1 py-0">Edit</button>
+                        <button onclick="deleteTask('${task.id}')" class="win-btn text-[9px] px-1 py-0">Del</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function getPriorityStyle(p) {
+            if (p === 'Urgent') return 'text-red-700';
+            if (p === 'High') return 'text-amber-800';
+            if (p === 'Medium') return 'text-blue-800';
+            return 'text-gray-700';
+        }
+
+        // DRAG & DROP
+        function handleDragStart(e, id) {
+            draggedTaskId = id;
+            playBeep(500, 'sawtooth');
+            e.currentTarget.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            document.querySelectorAll('.kanban-dropzone').forEach(z => z.classList.remove('drag-over'));
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropzone = e.currentTarget;
+            dropzone.classList.remove('drag-over');
+            const newStatus = dropzone.getAttribute('data-status');
+
+            if (draggedTaskId && newStatus) {
+                const task = tasks.find(t => t.id === draggedTaskId);
+                if (task && task.status !== newStatus) {
+                    playBeep(700, 'square');
+                    task.status = newStatus;
+                    saveState();
+                    render();
+                    updateStatus(`Moved task to [${newStatus}]`);
+                }
+            }
+            draggedTaskId = null;
+        }
+
+        // FORM & MODAL LOGIC
+        function openModal(id = null) {
+            playBeep(450, 'sine');
+            const modal = document.getElementById('taskModal');
+            const form = document.getElementById('taskForm');
+            const titleHeader = document.getElementById('modalTitle');
+            form.reset();
+
+            if (id) {
+                const task = tasks.find(t => t.id === id);
+                if (task) {
+                    titleHeader.innerText = 'Task Properties [Edit Mode]';
+                    document.getElementById('taskId').value = task.id;
+                    document.getElementById('taskTitle').value = task.title;
+                    document.getElementById('taskDescription').value = task.description || '';
+                    document.getElementById('taskProject').value = task.project;
+                    document.getElementById('taskPriority').value = task.priority;
+                    document.getElementById('taskStatus').value = task.status;
+                    document.getElementById('taskDueDate').value = task.dueDate;
+                }
+            } else {
+                titleHeader.innerText = 'Create New Task Entry';
+                document.getElementById('taskId').value = '';
+                document.getElementById('taskDueDate').value = new Date().toISOString().split('T')[0];
+            }
+
+            validateTitleInput();
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            playBeep(250, 'sine');
+            document.getElementById('taskModal').classList.add('hidden');
+        }
+
+        function validateTitleInput() {
+            const input = document.getElementById('taskTitle');
+            const counter = document.getElementById('titleCounter');
+            const err = document.getElementById('titleError');
+            counter.innerText = `${input.value.length}/80`;
+
+            if (input.value.trim().length >= 3) {
+                err.classList.add('hidden');
+                return true;
+            }
+            return false;
+        }
+
+        function validateDueDateInput() {
+            const input = document.getElementById('taskDueDate');
+            const err = document.getElementById('dueDateError');
+            if (input.value) {
+                err.classList.add('hidden');
+                return true;
+            } else {
+                err.classList.remove('hidden');
+                return false;
+            }
+        }
+
+        function handleTaskSubmit(e) {
+            e.preventDefault();
+            if (!validateTitleInput() || !validateDueDateInput()) {
+                playBeep(150, 'sawtooth');
+                showRetroAlert("Validation Error", "Please fill in all mandatory fields before saving.");
+                return;
+            }
+
+            const id = document.getElementById('taskId').value;
+            const title = document.getElementById('taskTitle').value.trim();
+            const description = document.getElementById('taskDescription').value.trim();
+            const project = document.getElementById('taskProject').value;
+            const priority = document.getElementById('taskPriority').value;
+            const status = document.getElementById('taskStatus').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+
+            if (id) {
+                const idx = tasks.findIndex(t => t.id === id);
+                if (idx !== -1) tasks[idx] = { id, title, description, project, priority, status, dueDate };
+            } else {
+                tasks.unshift({ id: 'task-' + Date.now(), title, description, project, priority, status, dueDate });
+            }
+
+            playBeep(850, 'triangle');
+            saveState();
+            render();
+            closeModal();
+            updateStatus("Task record committed to memory.");
+        }
+
+        function deleteTask(id) {
+            playBeep(200, 'sawtooth');
+            if (confirm("System Confirm: Are you sure you wish to purge this task?")) {
+                tasks = tasks.filter(t => t.id !== id);
+                saveState();
+                render();
+                updateStatus("Task record purged.");
+            }
+        }
+
+        function handleRepoSubmit(e) {
+            e.preventDefault();
+            const url = document.getElementById('repoUrlInput').value.trim();
+            if (url.startsWith('https://github.com/')) {
+                playBeep(900, 'sine');
+                showRetroAlert("Success", "GitHub Repository URL validated and linked to System Portal!");
+                document.getElementById('repoUrlInput').value = '';
+            } else {
+                playBeep(150, 'square');
+                showRetroAlert("Error", "Invalid Repository URL. Must begin with 'https://github.com/'");
+            }
+        }
+
+        function showRetroAlert(title, message) {
+            document.getElementById('retroAlertTitle').innerText = title;
+            document.getElementById('retroAlertMessage').innerText = message;
+            document.getElementById('retroAlert').classList.remove('hidden');
+        }
+
+        function closeRetroAlert() {
+            document.getElementById('retroAlert').classList.add('hidden');
+        }
+
+        function showAboutDialog() {
+            showRetroAlert("About Taskflow '95", "Taskflow Pro v2.4 (32-Bit Edition)\nBuilt with Vanilla JS & Retro CSS Theme.");
+        }
+
+        function updateStatus(msg) {
+            document.getElementById('statusIndicator').innerText = msg;
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
